@@ -2,17 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { DragSource } from "react-dnd";
 
-const style = {
-  border: "1px dashed gray",
-  backgroundColor: "white",
-  padding: "0.5rem 1rem",
-  marginRight: "1.5rem",
-  marginBottom: "1.5rem",
-  cursor: "move",
-  float: "left"
-};
-
-const boxSource = {
+const BombSource = {
   beginDrag(props) {
     return {
       name: props.name
@@ -20,11 +10,15 @@ const boxSource = {
   }
 };
 
-@DragSource(props => props.type, boxSource, (connect, monitor) => ({
+@DragSource(props => props.type, BombSource, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
   isDragging: monitor.isDragging()
 }))
-export default class Box extends Component {
+export default class Bomb extends Component {
+  state = {
+    ttl: 5
+  };
+
   static propTypes = {
     connectDragSource: PropTypes.func.isRequired,
     isDragging: PropTypes.bool.isRequired,
@@ -34,12 +28,11 @@ export default class Box extends Component {
   };
 
   render() {
-    const { name, isDropped, isDragging, connectDragSource } = this.props;
-    const opacity = isDragging ? 0.4 : 1;
+    const { type, isDropped, connectDragSource } = this.props;
 
     return connectDragSource(
-      <div style={{ ...style, opacity }}>
-        {isDropped ? <s>{name}</s> : name}
+      <div className={`bomb bomb-${type}`}>
+        <div className="bomb-ttl">{this.state.ttl}</div>
       </div>
     );
   }

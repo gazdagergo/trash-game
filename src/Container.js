@@ -3,7 +3,7 @@ import update from "immutability-helper";
 import { DragDropContext } from "react-dnd";
 import HTML5Backend, { NativeTypes } from "react-dnd-html5-backend";
 import Dustbin from "./Dustbin";
-import Box from "./Box";
+import Bomb from "./Bomb";
 import ItemTypes from "./ItemTypes";
 
 @DragDropContext(HTML5Backend)
@@ -16,12 +16,12 @@ export default class Container extends Component {
         { accepts: [ItemTypes.BLUE], lastDroppedItem: null },
         { accepts: [ItemTypes.GREEN], lastDroppedItem: null }
       ],
-      droppedBoxNames: []
+      droppedBombNames: []
     };
   }
 
-  isDropped(boxName) {
-    return this.state.droppedBoxNames.indexOf(boxName) > -1;
+  isDropped(bombName) {
+    return this.state.droppedBombNames.indexOf(bombName) > -1;
   }
 
   render() {
@@ -43,19 +43,19 @@ export default class Container extends Component {
         </div>
 
         <div style={{ overflow: "hidden", clear: "both" }}>
-          <Box
+          <Bomb
             name="Bottle"
             type={ItemTypes.RED}
             isDropped={this.isDropped("Bottle")}
             key={1}
           />
-          <Box
+          <Bomb
             name="Banana"
             type={ItemTypes.BLUE}
             isDropped={this.isDropped("Banana")}
             key={2}
           />
-          <Box
+          <Bomb
             name="Magazine"
             type={ItemTypes.GREEN}
             isDropped={this.isDropped("Magazine")}
@@ -68,7 +68,7 @@ export default class Container extends Component {
 
   handleDrop(index, item) {
     const { name } = item;
-    const droppedBoxNames = name ? { $push: [name] } : {};
+    const droppedBombNames = name ? { $push: [name] } : {};
 
     this.setState(
       update(this.state, {
@@ -79,7 +79,7 @@ export default class Container extends Component {
             }
           }
         },
-        droppedBoxNames
+        droppedBombNames
       })
     );
   }

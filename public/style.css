@@ -56,3 +56,35 @@ body,
   width: 100%;
   max-width: 800px;
 }
+
+.bomb {
+  cursor: move;
+  width: 70px;
+  height: 70px;
+  position: absolute;
+  border-radius: 70px;
+}
+
+.bomb-ttl {
+  position: absolute;
+  right: 0;
+  top: 0;
+  background-color: #fd971e;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  border-radius: 30px;
+}
+
+.bomb-red {
+  background-color: #c61924;
+}
+
+.bomb-blue {
+  background-color: #54a4f3;
+}
+
+.bomb-green {
+  background-color: #2e7f2d;
+}
