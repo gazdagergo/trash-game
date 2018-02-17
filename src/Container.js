@@ -23,12 +23,8 @@ export default class Container extends Component {
         { id: 4, type: ItemTypes.BLUE, ttl: 5 },
         { id: 5, type: ItemTypes.RED, ttl: 5 }
       ],
-      droppedBombNames: []
+      points: 0
     };
-  }
-
-  isDropped(bombName) {
-    return this.state.droppedBombNames.indexOf(bombName) > -1;
   }
 
   render() {
@@ -42,7 +38,7 @@ export default class Container extends Component {
               <Dustbin
                 accepts={accepts}
                 lastDroppedItem={lastDroppedItem}
-                onDrop={item => this.handleDrop(index, item)}
+                onDrop={item => this.handleDrop(item)}
                 key={index}
               />
             ))}
@@ -51,37 +47,22 @@ export default class Container extends Component {
 
         <div style={{ overflow: "hidden", clear: "both" }}>
           {this.state.bombs.map((bomb, index) => (
-            <Bomb
-              id={bomb.id}
-              type={bomb.type}
-              isDropped={this.isDropped(bomb.name)}
-              key={index}
-            />
+            <Bomb id={bomb.id} type={bomb.type} key={index} />
           ))}
         </div>
       </div>
     );
   }
 
-  handleDrop(index, item) {
+  handleDrop(item) {
     const { id } = item;
-    // const droppedBombNames = name ? { $push: [name] } : {};
-
-    /*  this.setState(
-      update(this.state, {
-        dustbins: {
-          [index]: {
-            lastDroppedItem: {
-              $set: item
-            }
-          }
-        },
-        droppedBombNames
-      })
-    ); */
 
     const bombsCopy = [...this.state.bombs];
     const bombs = bombsCopy.filter(item => item.id !== id);
-    this.setState({ bombs });
+
+    let { points } = this.state;
+    points += 1;
+
+    this.setState({ bombs, points });
   }
 }
