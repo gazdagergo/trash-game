@@ -33,13 +33,6 @@ export default class Dustbin extends Component {
     } = this.props;
     const isActive = isOver && canDrop;
 
-    let backgroundColor = "#222";
-    if (isActive) {
-      backgroundColor = "darkgreen";
-    } else if (canDrop) {
-      backgroundColor = "darkkhaki";
-    }
-
     return connectDropTarget(
       <div
         className={`dustbin dustbin-${accepts} ${isActive ? "active" : ""}`}

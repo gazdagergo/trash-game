@@ -16,6 +16,8 @@ export default class Container extends Component {
         { accepts: [ItemTypes.BLUE], lastDroppedItem: null },
         { accepts: [ItemTypes.GREEN], lastDroppedItem: null }
       ],
+      bombs: [],
+
       droppedBombNames: []
     };
   }
