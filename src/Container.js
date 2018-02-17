@@ -5,6 +5,11 @@ import Dustbin from "./Dustbin";
 import Bomb from "./Bomb";
 import ItemTypes from "./ItemTypes";
 
+const getRandPosition = () => ({
+  left: `${Math.random() * 100}%`,
+  top: `${Math.random() * 100}%`
+});
+
 @DragDropContext(HTML5Backend)
 export default class Container extends Component {
   constructor(props) {
@@ -16,11 +21,11 @@ export default class Container extends Component {
         { accepts: [ItemTypes.GREEN] }
       ],
       bombs: [
-        { id: 1, type: ItemTypes.RED },
-        { id: 2, type: ItemTypes.RED },
-        { id: 3, type: ItemTypes.GREEN },
-        { id: 4, type: ItemTypes.BLUE },
-        { id: 5, type: ItemTypes.RED }
+        { id: 1, type: ItemTypes.RED, position: getRandPosition() },
+        { id: 2, type: ItemTypes.RED, position: getRandPosition() },
+        { id: 3, type: ItemTypes.GREEN, position: getRandPosition() },
+        { id: 4, type: ItemTypes.BLUE, position: getRandPosition() },
+        { id: 5, type: ItemTypes.RED, position: getRandPosition() }
       ],
       score: 0
     };
@@ -29,6 +34,17 @@ export default class Container extends Component {
   render() {
     return (
       <div>
+        <div className="bomb-wrap">
+          {this.state.bombs.map((bomb, index) => (
+            <Bomb
+              key={index}
+              id={bomb.id}
+              type={bomb.type}
+              position={bomb.position}
+            />
+          ))}
+        </div>
+
         <div className="bottom-wrap">
           <div className="dustbin-wrap">
             {this.state.dustbins.map(({ accepts }, index) => (
@@ -39,12 +55,6 @@ export default class Container extends Component {
               />
             ))}
           </div>
-        </div>
-
-        <div style={{ overflow: "hidden", clear: "both" }}>
-          {this.state.bombs.map((bomb, index) => (
-            <Bomb id={bomb.id} type={bomb.type} key={index} />
-          ))}
         </div>
       </div>
     );

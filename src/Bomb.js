@@ -24,13 +24,17 @@ export default class Bomb extends Component {
     isDragging: PropTypes.bool.isRequired,
     id: PropTypes.number.isRequired,
     type: PropTypes.string.isRequired,
+    position: PropTypes.shape({
+      left: PropTypes.number,
+      top: PropTypes.number
+    })
   };
 
   render() {
-    const { type, connectDragSource } = this.props;
+    const { type, connectDragSource, position } = this.props;
 
     return connectDragSource(
-      <div className={`bomb bomb-${type}`}>
+      <div className={`bomb bomb-${type}`} style={{ ...position }}>
         <div className="bomb-ttl">{this.state.ttl}</div>
       </div>
     );
