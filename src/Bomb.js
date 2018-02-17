@@ -5,7 +5,7 @@ import { DragSource } from "react-dnd";
 const BombSource = {
   beginDrag(props) {
     return {
-      name: props.name
+      id: props.id
     };
   }
 };
@@ -22,13 +22,13 @@ export default class Bomb extends Component {
   static propTypes = {
     connectDragSource: PropTypes.func.isRequired,
     isDragging: PropTypes.bool.isRequired,
-    name: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
     type: PropTypes.string.isRequired,
     isDropped: PropTypes.bool.isRequired
   };
 
   render() {
-    const { type, isDropped, connectDragSource } = this.props;
+    const { type, id, isDropped, isDragging, connectDragSource } = this.props;
 
     return connectDragSource(
       <div className={`bomb bomb-${type}`}>

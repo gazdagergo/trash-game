@@ -16,8 +16,13 @@ export default class Container extends Component {
         { accepts: [ItemTypes.BLUE], lastDroppedItem: null },
         { accepts: [ItemTypes.GREEN], lastDroppedItem: null }
       ],
-      bombs: [],
-
+      bombs: [
+        { id: 1, type: ItemTypes.RED, ttl: 5 },
+        { id: 2, type: ItemTypes.RED, ttl: 5 },
+        { id: 3, type: ItemTypes.GREEN, ttl: 5 },
+        { id: 4, type: ItemTypes.BLUE, ttl: 5 },
+        { id: 5, type: ItemTypes.RED, ttl: 5 }
+      ],
       droppedBombNames: []
     };
   }
@@ -45,34 +50,24 @@ export default class Container extends Component {
         </div>
 
         <div style={{ overflow: "hidden", clear: "both" }}>
-          <Bomb
-            name="Bottle"
-            type={ItemTypes.RED}
-            isDropped={this.isDropped("Bottle")}
-            key={1}
-          />
-          <Bomb
-            name="Banana"
-            type={ItemTypes.BLUE}
-            isDropped={this.isDropped("Banana")}
-            key={2}
-          />
-          <Bomb
-            name="Magazine"
-            type={ItemTypes.GREEN}
-            isDropped={this.isDropped("Magazine")}
-            key={3}
-          />
+          {this.state.bombs.map((bomb, index) => (
+            <Bomb
+              id={bomb.id}
+              type={bomb.type}
+              isDropped={this.isDropped(bomb.name)}
+              key={index}
+            />
+          ))}
         </div>
       </div>
     );
   }
 
   handleDrop(index, item) {
-    const { name } = item;
-    const droppedBombNames = name ? { $push: [name] } : {};
+    const { id } = item;
+    // const droppedBombNames = name ? { $push: [name] } : {};
 
-    this.setState(
+    /*  this.setState(
       update(this.state, {
         dustbins: {
           [index]: {
@@ -83,6 +78,10 @@ export default class Container extends Component {
         },
         droppedBombNames
       })
-    );
+    ); */
+
+    const bombsCopy = [...this.state.bombs];
+    const bombs = bombsCopy.filter(item => item.id !== id);
+    this.setState({ bombs });
   }
 }
