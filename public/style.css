@@ -1,0 +1,58 @@
+html,
+body,
+.root {
+  height: 100%;
+}
+
+.dustbin {
+  height: 12rem;
+  width: 12rem;
+  margin-right: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+  font-size: 1rem;
+  line-height: normal;
+  float: left;
+  transform-origin: bottom center;
+}
+
+.dustbin.active {
+  transform: scale(1.1);
+}
+
+.dustbin-red {
+  background-color: #c61924;
+}
+.dustbin-red.active {
+  background-color: #90131b;
+}
+
+.dustbin-blue {
+  background-color: #54a4f3;
+}
+.dustbin-blue.active {
+  background-color: #3a76b1;
+}
+
+.dustbin-green {
+  background-color: #2e7f2d;
+}
+.dustbin-green.active {
+  background-color: #1c501b;
+}
+
+.bottom-wrap {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.dustbin-wrap {
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 800px;
+}

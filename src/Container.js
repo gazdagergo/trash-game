@@ -12,13 +12,9 @@ export default class Container extends Component {
     super(props);
     this.state = {
       dustbins: [
-        { accepts: [ItemTypes.GLASS], lastDroppedItem: null },
-        { accepts: [ItemTypes.FOOD], lastDroppedItem: null },
-        {
-          accepts: [ItemTypes.PAPER, ItemTypes.GLASS, NativeTypes.URL],
-          lastDroppedItem: null
-        },
-        { accepts: [ItemTypes.PAPER, NativeTypes.FILE], lastDroppedItem: null }
+        { accepts: [ItemTypes.RED], lastDroppedItem: null },
+        { accepts: [ItemTypes.BLUE], lastDroppedItem: null },
+        { accepts: [ItemTypes.GREEN], lastDroppedItem: null }
       ],
       droppedBoxNames: []
     };
@@ -33,33 +29,35 @@ export default class Container extends Component {
 
     return (
       <div>
-        <div style={{ overflow: "hidden", clear: "both" }}>
-          {dustbins.map(({ accepts, lastDroppedItem }, index) => (
-            <Dustbin
-              accepts={accepts}
-              lastDroppedItem={lastDroppedItem}
-              onDrop={item => this.handleDrop(index, item)}
-              key={index}
-            />
-          ))}
+        <div className="bottom-wrap">
+          <div className="dustbin-wrap">
+            {dustbins.map(({ accepts, lastDroppedItem }, index) => (
+              <Dustbin
+                accepts={accepts}
+                lastDroppedItem={lastDroppedItem}
+                onDrop={item => this.handleDrop(index, item)}
+                key={index}
+              />
+            ))}
+          </div>
         </div>
 
         <div style={{ overflow: "hidden", clear: "both" }}>
           <Box
             name="Bottle"
-            type={ItemTypes.GLASS}
+            type={ItemTypes.RED}
             isDropped={this.isDropped("Bottle")}
             key={1}
           />
           <Box
             name="Banana"
-            type={ItemTypes.FOOD}
+            type={ItemTypes.BLUE}
             isDropped={this.isDropped("Banana")}
             key={2}
           />
           <Box
             name="Magazine"
-            type={ItemTypes.PAPER}
+            type={ItemTypes.GREEN}
             isDropped={this.isDropped("Magazine")}
             key={3}
           />

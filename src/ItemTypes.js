@@ -1,5 +1,5 @@
 export default {
-  FOOD: "food",
-  GLASS: "glass",
-  PAPER: "paper"
+  RED: "red",
+  BLUE: "blue",
+  GREEN: "green"
 };
