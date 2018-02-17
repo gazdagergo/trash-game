@@ -19,7 +19,6 @@ export default class Dustbin extends Component {
     isOver: PropTypes.bool.isRequired,
     canDrop: PropTypes.bool.isRequired,
     accepts: PropTypes.arrayOf(PropTypes.string).isRequired,
-    lastDroppedItem: PropTypes.object,
     onDrop: PropTypes.func.isRequired
   };
 
@@ -29,7 +28,6 @@ export default class Dustbin extends Component {
       isOver,
       canDrop,
       connectDropTarget,
-      lastDroppedItem
     } = this.props;
     const isActive = isOver && canDrop;
 

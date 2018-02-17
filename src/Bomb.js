@@ -24,11 +24,10 @@ export default class Bomb extends Component {
     isDragging: PropTypes.bool.isRequired,
     id: PropTypes.number.isRequired,
     type: PropTypes.string.isRequired,
-    isDropped: PropTypes.bool.isRequired
   };
 
   render() {
-    const { type, id, isDropped, isDragging, connectDragSource } = this.props;
+    const { type, connectDragSource } = this.props;
 
     return connectDragSource(
       <div className={`bomb bomb-${type}`}>

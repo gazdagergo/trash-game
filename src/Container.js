@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import update from "immutability-helper";
 import { DragDropContext } from "react-dnd";
-import HTML5Backend, { NativeTypes } from "react-dnd-html5-backend";
+import HTML5Backend from "react-dnd-html5-backend";
 import Dustbin from "./Dustbin";
 import Bomb from "./Bomb";
 import ItemTypes from "./ItemTypes";
@@ -12,32 +11,29 @@ export default class Container extends Component {
     super(props);
     this.state = {
       dustbins: [
-        { accepts: [ItemTypes.RED], lastDroppedItem: null },
-        { accepts: [ItemTypes.BLUE], lastDroppedItem: null },
-        { accepts: [ItemTypes.GREEN], lastDroppedItem: null }
+        { accepts: [ItemTypes.RED] },
+        { accepts: [ItemTypes.BLUE] },
+        { accepts: [ItemTypes.GREEN] }
       ],
       bombs: [
-        { id: 1, type: ItemTypes.RED, ttl: 5 },
-        { id: 2, type: ItemTypes.RED, ttl: 5 },
-        { id: 3, type: ItemTypes.GREEN, ttl: 5 },
-        { id: 4, type: ItemTypes.BLUE, ttl: 5 },
-        { id: 5, type: ItemTypes.RED, ttl: 5 }
+        { id: 1, type: ItemTypes.RED },
+        { id: 2, type: ItemTypes.RED },
+        { id: 3, type: ItemTypes.GREEN },
+        { id: 4, type: ItemTypes.BLUE },
+        { id: 5, type: ItemTypes.RED }
       ],
-      points: 0
+      score: 0
     };
   }
 
   render() {
-    const { dustbins } = this.state;
-
     return (
       <div>
         <div className="bottom-wrap">
           <div className="dustbin-wrap">
-            {dustbins.map(({ accepts, lastDroppedItem }, index) => (
+            {this.state.dustbins.map(({ accepts }, index) => (
               <Dustbin
                 accepts={accepts}
-                lastDroppedItem={lastDroppedItem}
                 onDrop={item => this.handleDrop(item)}
                 key={index}
               />
@@ -60,9 +56,9 @@ export default class Container extends Component {
     const bombsCopy = [...this.state.bombs];
     const bombs = bombsCopy.filter(item => item.id !== id);
 
-    let { points } = this.state;
-    points += 1;
+    let { score } = this.state;
+    score += 1;
 
-    this.setState({ bombs, points });
+    this.setState({ bombs, score });
   }
 }
