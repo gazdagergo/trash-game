@@ -20,11 +20,6 @@ export default class Container extends Component {
         },
         { accepts: [ItemTypes.PAPER, NativeTypes.FILE], lastDroppedItem: null }
       ],
-      boxes: [
-        { name: "Bottle", type: ItemTypes.GLASS },
-        { name: "Banana", type: ItemTypes.FOOD },
-        { name: "Magazine", type: ItemTypes.PAPER }
-      ],
       droppedBoxNames: []
     };
   }
@@ -34,7 +29,7 @@ export default class Container extends Component {
   }
 
   render() {
-    const { boxes, dustbins } = this.state;
+    const { dustbins } = this.state;
 
     return (
       <div>
@@ -50,14 +45,24 @@ export default class Container extends Component {
         </div>
 
         <div style={{ overflow: "hidden", clear: "both" }}>
-          {boxes.map(({ name, type }, index) => (
-            <Box
-              name={name}
-              type={type}
-              isDropped={this.isDropped(name)}
-              key={index}
-            />
-          ))}
+          <Box
+            name="Bottle"
+            type={ItemTypes.GLASS}
+            isDropped={this.isDropped("Bottle")}
+            key={1}
+          />
+          <Box
+            name="Banana"
+            type={ItemTypes.FOOD}
+            isDropped={this.isDropped("Banana")}
+            key={2}
+          />
+          <Box
+            name="Magazine"
+            type={ItemTypes.PAPER}
+            isDropped={this.isDropped("Magazine")}
+            key={3}
+          />
         </div>
       </div>
     );
