@@ -21,7 +21,7 @@ const frequencyChange = (5000 - 500) / 120; // 5 sec to .5 sec in 120 iteration
 
 const callWithIncreasingFrequency = (interval, callback) => {
   interval -= frequencyChange;
-  if (interval > 0)
+  if (interval >= 0.5)
     setTimeout(() => {
       callback();
       callWithIncreasingFrequency(interval, callback);
@@ -38,21 +38,38 @@ export default class Container extends Component {
         { accepts: [ItemTypes.BLUE] },
         { accepts: [ItemTypes.GREEN] }
       ],
-      bombs: [
-        { id: 1, type: ItemTypes.RED, position: getRandPosition() },
-        { id: 2, type: ItemTypes.RED, position: getRandPosition() },
-        { id: 3, type: ItemTypes.GREEN, position: getRandPosition() },
-        { id: 4, type: ItemTypes.BLUE, position: getRandPosition() },
-        { id: 5, type: ItemTypes.RED, position: getRandPosition() }
-      ],
+      bombs: [],
       score: 0,
-      bombId: 0
+      bombId: 0,
+      overtimeBombIds: []
     };
   }
 
   componentDidMount() {
     callWithIncreasingFrequency(5000, this.bombFactory);
   }
+
+  removeBomb = id => {
+    const bombsCopy = [...this.state.bombs];
+    const bombs = bombsCopy.filter(item => item.id !== id);
+    this.setState({ bombs });
+  };
+
+  changeScore = points => {
+    this.setState(prevState => ({ score: prevState.score + points }));
+  };
+
+  handleDrop(id) {
+    this.removeBomb(id);
+    this.changeScore(1);
+  }
+
+  handleBombLifeEnd = id => {
+    this.changeScore(-1);
+    this.setState(prevState => ({
+      overtimeBombIds: [...prevState.overtimeBombIds, id]
+    }));
+  };
 
   bombFactory = () => {
     this.setState(prevState => ({
@@ -61,24 +78,33 @@ export default class Container extends Component {
         {
           id: prevState.bombId++,
           type: pickRandomType(ItemTypes),
-          position: getRandPosition()
+          position: getRandPosition(),
+          handleLifeEnd: this.handleBombLifeEnd
         }
       ]
     }));
   };
 
+  isOvertimed(bombId) {
+    return this.state.overtimeBombIds.indexOf(bombId) > -1;
+  }
+
   render() {
     return (
       <div>
         <div className="bomb-wrap">
-          {this.state.bombs.map((bomb, index) => (
-            <Bomb
-              key={index}
-              id={bomb.id}
-              type={bomb.type}
-              position={bomb.position}
-            />
-          ))}
+          {this.state.bombs.map((bomb, index) => {
+            if (this.isOvertimed(bomb.id)) return null;
+            return (
+              <Bomb
+                key={index}
+                id={bomb.id}
+                type={bomb.type}
+                position={bomb.position}
+                handleLifeEnd={() => bomb.handleLifeEnd(bomb.id)}
+              />
+            );
+          })}
         </div>
 
         <div className="bottom-wrap">
@@ -86,7 +112,7 @@ export default class Container extends Component {
             {this.state.dustbins.map(({ accepts }, index) => (
               <Dustbin
                 accepts={accepts}
-                onDrop={item => this.handleDrop(item)}
+                onDrop={item => this.handleDrop(item.id)}
                 key={index}
               />
             ))}
@@ -94,17 +120,5 @@ export default class Container extends Component {
         </div>
       </div>
     );
-  }
-
-  handleDrop(item) {
-    const { id } = item;
-
-    const bombsCopy = [...this.state.bombs];
-    const bombs = bombsCopy.filter(item => item.id !== id);
-
-    let { score } = this.state;
-    score += 1;
-
-    this.setState({ bombs, score });
   }
 }
