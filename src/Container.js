@@ -10,6 +10,24 @@ const getRandPosition = () => ({
   top: `${Math.random() * 100}%`
 });
 
+const pickRandomType = obj => {
+  let result;
+  let count = 0;
+  for (var prop in obj) if (Math.random() < 1 / ++count) result = obj[prop];
+  return result;
+};
+
+const frequencyChange = (5000 - 500) / 120; // 5 sec to .5 sec in 120 iteration
+
+const callWithIncreasingFrequency = (interval, callback) => {
+  interval -= frequencyChange;
+  if (interval > 0)
+    setTimeout(() => {
+      callback();
+      callWithIncreasingFrequency(interval, callback);
+    }, interval);
+};
+
 @DragDropContext(HTML5Backend)
 export default class Container extends Component {
   constructor(props) {
@@ -27,9 +45,27 @@ export default class Container extends Component {
         { id: 4, type: ItemTypes.BLUE, position: getRandPosition() },
         { id: 5, type: ItemTypes.RED, position: getRandPosition() }
       ],
-      score: 0
+      score: 0,
+      bombId: 0
     };
   }
+
+  componentDidMount() {
+    callWithIncreasingFrequency(5000, this.bombFactory);
+  }
+
+  bombFactory = () => {
+    this.setState(prevState => ({
+      bombs: [
+        ...prevState.bombs,
+        {
+          id: prevState.bombId++,
+          type: pickRandomType(ItemTypes),
+          position: getRandPosition()
+        }
+      ]
+    }));
+  };
 
   render() {
     return (
