@@ -92,6 +92,7 @@ export default class Container extends Component {
   render() {
     return (
       <div>
+        <div className="score">Score: {this.state.score}</div>
         <div className="bomb-wrap">
           {this.state.bombs.map((bomb, index) => {
             if (this.isOvertimed(bomb.id)) return null;
@@ -111,9 +112,9 @@ export default class Container extends Component {
           <div className="dustbin-wrap">
             {this.state.dustbins.map(({ accepts }, index) => (
               <Dustbin
+                key={index}
                 accepts={accepts}
                 onDrop={item => this.handleDrop(item.id)}
-                key={index}
               />
             ))}
           </div>
