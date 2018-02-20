@@ -95,3 +95,9 @@ body,
 .bomb-green {
   background-color: #2e7f2d;
 }
+
+.color-change-timer {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+}

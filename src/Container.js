@@ -4,29 +4,16 @@ import HTML5Backend from "react-dnd-html5-backend";
 import Dustbin from "./Dustbin";
 import Bomb from "./Bomb";
 import ItemTypes from "./ItemTypes";
-
-const getRandPosition = () => ({
-  left: `${Math.random() * 100}%`,
-  top: `${Math.random() * 100}%`
-});
-
-const pickRandomType = obj => {
-  let result;
-  let count = 0;
-  for (var prop in obj) if (Math.random() < 1 / ++count) result = obj[prop];
-  return result;
-};
+import {
+  getRandPosition,
+  pickRandomType,
+  callWithIncreasingFrequency,
+  getRemainingSec,
+  shuffleArray
+} from "./helper";
 
 const frequencyChange = (5000 - 500) / 120; // 5 sec to .5 sec in 120 iteration
-
-const callWithIncreasingFrequency = (interval, callback) => {
-  interval -= frequencyChange;
-  if (interval >= 0.5)
-    setTimeout(() => {
-      callback();
-      callWithIncreasingFrequency(interval, callback);
-    }, interval);
-};
+const binShuffleTime = 10;
 
 @DragDropContext(HTML5Backend)
 export default class Container extends Component {
@@ -41,12 +28,21 @@ export default class Container extends Component {
       bombs: [],
       score: 0,
       bombId: 0,
-      overtimeBombIds: []
+      overtimeBombIds: [],
+      start: 0,
+      binsShuffleIn: binShuffleTime
     };
   }
 
   componentDidMount() {
-    callWithIncreasingFrequency(5000, this.bombFactory);
+    callWithIncreasingFrequency(5000, frequencyChange, this.bombFactory);
+    this.setState({ start: Date.now() });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.binsShuffleIn === binShuffleTime) {
+      this.interval = setInterval(this.handleTrashColorShuffle, 50);
+    }
   }
 
   removeBomb = id => {
@@ -69,6 +65,23 @@ export default class Container extends Component {
     this.setState(prevState => ({
       overtimeBombIds: [...prevState.overtimeBombIds, id]
     }));
+  };
+
+  handleTrashColorShuffle = () => {
+    const binsShuffleIn = getRemainingSec(this.state.start, binShuffleTime);
+    console.log(binsShuffleIn);
+    if (binsShuffleIn === 0) {
+      clearInterval(this.interval);
+      const dustbins = [...this.state.dustbins];
+      shuffleArray(dustbins);
+      this.setState({
+        start: Date.now(),
+        binsShuffleIn: binShuffleTime,
+        dustbins
+      });
+    } else if (binsShuffleIn < this.state.binsShuffleIn) {
+      this.setState({ binsShuffleIn });
+    }
   };
 
   bombFactory = () => {
@@ -117,6 +130,9 @@ export default class Container extends Component {
                 onDrop={item => this.handleDrop(item.id)}
               />
             ))}
+          </div>
+          <div className="color-change-timer">
+            Changes in: {this.state.binsShuffleIn} sec
           </div>
         </div>
       </div>

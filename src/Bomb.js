@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { DragSource } from "react-dnd";
+import { getRandomInRange, getRemainingSec } from "./helper";
 
 const BombSource = {
   beginDrag(props) {
@@ -9,9 +10,6 @@ const BombSource = {
     };
   }
 };
-
-const getRandomInRange = (from, to) =>
-  Math.ceil(Math.random() * from) + to - from;
 
 @DragSource(props => props.type, BombSource, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
@@ -48,14 +46,15 @@ export default class Bomb extends Component {
   }
 
   handleTtl = () => {
-    const elapsedMs = new Date() - this.state.start;
-    const elapsed = Math.round(elapsedMs / 1000);
-    const remaining = this.state.ttl - elapsed;
+    const remaining = getRemainingSec(this.state.start, this.state.ttl);
+
     if (remaining === 0) {
       clearInterval(this.timer);
       this.props.handleLifeEnd();
     }
-    this.setState({ remaining });
+    if (remaining < this.state.remaining) {
+      this.setState({ remaining });
+    }
   };
 
   render() {
