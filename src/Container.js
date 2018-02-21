@@ -13,7 +13,7 @@ import {
 } from "./helper";
 
 const frequencyChange = (5000 - 500) / 120; // 5 sec to .5 sec in 120 iteration
-const binShuffleTime = 10;
+const binShuffleTime = 40;
 
 @DragDropContext(HTML5Backend)
 export default class Container extends Component {
