@@ -9,10 +9,11 @@ import {
   pickRandomType,
   callWithIncreasingFrequency,
   getRemainingSec,
-  shuffleArray
+  shuffleArray,
+  getFrequencyChange
 } from "./helper";
 
-const frequencyChange = (5000 - 500) / 120; // 5 sec to .5 sec in 120 iteration
+const frequencyChange = getFrequencyChange(5, 0.5, 120); // 5 sec to .5 sec in 120 sec
 const binShuffleTime = 40;
 
 @DragDropContext(HTML5Backend)
@@ -30,12 +31,19 @@ export default class Container extends Component {
       bombId: 0,
       overtimeBombIds: [],
       start: 0,
-      binsShuffleIn: binShuffleTime
+      binsShuffleIn: binShuffleTime,
+      endGame: false
     };
+    this.timeout = null;
   }
 
   componentDidMount() {
-    callWithIncreasingFrequency(5000, frequencyChange, this.bombFactory);
+    callWithIncreasingFrequency(
+      5000,
+      frequencyChange,
+      this.bombFactory,
+      this.timeout
+    );
     this.setState({ start: Date.now() });
   }
 
@@ -69,7 +77,6 @@ export default class Container extends Component {
 
   handleTrashColorShuffle = () => {
     const binsShuffleIn = getRemainingSec(this.state.start, binShuffleTime);
-    console.log(binsShuffleIn);
     if (binsShuffleIn === 0) {
       clearInterval(this.interval);
       const dustbins = [...this.state.dustbins];
