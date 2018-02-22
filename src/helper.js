@@ -13,13 +13,14 @@ export const pickRandomType = obj => {
 export const callWithIncreasingFrequency = (
   interval,
   frequencyChange,
-  callback
+  callback,
+  timeout
 ) => {
   interval += frequencyChange;
   if (interval >= 0.5)
-    setTimeout(() => {
+    timeout = setTimeout(() => {
       callback();
-      callWithIncreasingFrequency(interval, frequencyChange, callback);
+      callWithIncreasingFrequency(interval, frequencyChange, callback, timeout);
     }, interval);
 };
 

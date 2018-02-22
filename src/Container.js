@@ -31,12 +31,19 @@ export default class Container extends Component {
       bombId: 0,
       overtimeBombIds: [],
       start: 0,
-      binsShuffleIn: binShuffleTime
+      binsShuffleIn: binShuffleTime,
+      endGame: false
     };
+    this.timeout = null;
   }
 
   componentDidMount() {
-    callWithIncreasingFrequency(5000, frequencyChange, this.bombFactory);
+    callWithIncreasingFrequency(
+      5000,
+      frequencyChange,
+      this.bombFactory,
+      this.timeout
+    );
     this.setState({ start: Date.now() });
   }
 
