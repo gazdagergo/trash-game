@@ -15,12 +15,18 @@ export const callWithIncreasingFrequency = (
   frequencyChange,
   callback
 ) => {
-  interval -= frequencyChange;
+  interval += frequencyChange;
   if (interval >= 0.5)
     setTimeout(() => {
       callback();
       callWithIncreasingFrequency(interval, frequencyChange, callback);
     }, interval);
+};
+
+export const getFrequencyChange = (startInterval, endInterval, duration) => {
+  const numberOfIterations = 2 * duration / (startInterval + endInterval);
+  const frequencyChange = (startInterval - endInterval) / numberOfIterations;
+  return frequencyChange * -1;
 };
 
 export const getRandomInRange = (from, to) =>

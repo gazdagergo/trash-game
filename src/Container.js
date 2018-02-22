@@ -9,10 +9,11 @@ import {
   pickRandomType,
   callWithIncreasingFrequency,
   getRemainingSec,
-  shuffleArray
+  shuffleArray,
+  getFrequencyChange
 } from "./helper";
 
-const frequencyChange = (5000 - 500) / 120; // 5 sec to .5 sec in 120 iteration
+const frequencyChange = getFrequencyChange(5, 0.5, 120); // 5 sec to .5 sec in 120 sec
 const binShuffleTime = 40;
 
 @DragDropContext(HTML5Backend)
@@ -69,7 +70,6 @@ export default class Container extends Component {
 
   handleTrashColorShuffle = () => {
     const binsShuffleIn = getRemainingSec(this.state.start, binShuffleTime);
-    console.log(binsShuffleIn);
     if (binsShuffleIn === 0) {
       clearInterval(this.interval);
       const dustbins = [...this.state.dustbins];
